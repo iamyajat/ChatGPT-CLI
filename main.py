@@ -3,6 +3,7 @@ import os
 import json
 import argparse
 import pickle
+from colorama import Fore, Back, Style
 
 openai.api_key_path = "./api_key.txt"
 
@@ -35,7 +36,7 @@ def get_persona_prompt(persona):
         for p in personas:
             if p["name"] == persona:
                 persona_def = p["prompt"]
-                print("Persona loaded:", persona, end="\n\n")
+                print(Fore.CYAN + persona + " persona loaded" + Style.RESET_ALL, end="\n\n")
                 found = True
                 break
 
@@ -64,9 +65,15 @@ def load_chat_history(filename):
 
 
 def start_chat(persona=None, history_file_name=None):
-    print("\nWelcome to the ChatGPT! Please ask me a question.")
-    print("Type 'quit' to exit the chatbot.")
-    print("Type 'clear' to clear the chat history.", end="\n\n")
+    print(Fore.GREEN + "\nWelcome to ChatGPT! Please ask me a question." + Style.RESET_ALL)
+    print("Type " + Fore.YELLOW + "quit" + Style.RESET_ALL + " to exit the chat.")
+    print(
+        "Type "
+        + Fore.YELLOW
+        + "clear"
+        + Style.RESET_ALL
+        + " to clear the chat history.\n"
+    )
 
     persona_def = get_persona_prompt(persona)
     messages = [{"role": "system", "content": persona_def}]
@@ -75,14 +82,14 @@ def start_chat(persona=None, history_file_name=None):
         messages = load_chat_history(history_file_name)
         for m in messages:
             if m["role"] == "user":
-                print("You:", m["content"])
+                print(Fore.MAGENTA + "You: " + Style.RESET_ALL + m["content"])
             elif m["role"] == "assistant":
-                print("Assistant:", m["content"])
+                print(Fore.GREEN + "Assistant: " + Style.RESET_ALL + m["content"])
 
             print()
 
     while True:
-        user_input = input("You: ")
+        user_input = input(Fore.MAGENTA + "You: " + Style.RESET_ALL)
         if user_input == "quit":
             save_chat_history(messages)
             break
@@ -99,13 +106,9 @@ def start_chat(persona=None, history_file_name=None):
         )
         assistant_message = response["choices"][0]["message"]["content"]
         messages.append({"role": "assistant", "content": assistant_message.strip()})
-        #  print it in a different colour
-        
-
-        print("\nAssistant:", assistant_message, end="\n\n")
+        print(Fore.GREEN + "\nAssistant: " + Style.RESET_ALL + assistant_message.strip(), end="\n\n")
 
 
-# get values from command line
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument(
