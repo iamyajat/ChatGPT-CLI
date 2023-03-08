@@ -5,9 +5,26 @@ import argparse
 import pickle
 from colorama import Fore, Back, Style
 
+# C:\\Users\\yajat\\.chatgpt-cli
+# ~/.chatgpt-cli
+
+import os
+
+BASE_PATH = os.path.expanduser("~") + "/.chatgpt-cli/"
+
+if not os.path.exists(BASE_PATH):
+    os.makedirs(BASE_PATH)
+
+filename = "personas.json"
+filepath = os.path.join(BASE_PATH, filename)
+
+if not os.path.exists(filepath):
+    with open(filepath, "w") as f:
+        f.write("{}")
+
 
 def create_personas():
-    with open("personas.json", "r") as f:
+    with open(BASE_PATH + "personas.json", "r") as f:
         personas = json.load(f)
 
     new_persona = {}
@@ -15,14 +32,14 @@ def create_personas():
     new_persona["prompt"] = input("Enter the prompt for the persona: ")
     personas.append(new_persona)
 
-    with open("personas.json", "w") as f:
+    with open(BASE_PATH + "personas.json", "w") as f:
         json.dump(personas, f, indent=4)
 
     return personas
 
 
 def get_persona_prompt(persona):
-    with open("personas.json", "r") as f:
+    with open(BASE_PATH + "personas.json", "r") as f:
         personas = json.load(f)
 
     persona_def = ""
@@ -54,13 +71,13 @@ def save_chat_history(messages):
     save = input("Do you want to save the chat history? (y/n) ")
     if save == "y":
         filename = input("Enter the chat name to save the chat history: ")
-        with open("./history/" + filename + ".pkl", "wb") as f:
+        with open(BASE_PATH + "history/" + filename + ".pkl", "wb") as f:
             pickle.dump(messages, f)
         print("Chat history saved to:", filename, end="\n\n")
 
 
 def load_chat_history(filename):
-    with open("./history/" + filename + ".pkl", "rb") as f:
+    with open(BASE_PATH + "history/" + filename + ".pkl", "rb") as f:
         messages = pickle.load(f)
     return messages
 
@@ -120,27 +137,20 @@ if __name__ == "__main__":
     parser.add_argument(
         "-p", "--persona", type=str, default=None, help="The persona of the chatbot."
     )
-    # parser.add_argument(
-    #     "-cp",
-    #     "--create-persona",
-    #     type=str,
-    #     default=None,
-    #     help="Create a user defined persona.",
-    # )
     parser.add_argument(
         "-l", "--load", type=str, default=None, help="The chat history to load."
     )
     args = parser.parse_args()
 
     while True:
-        if not os.path.exists("./api_key.txt"):
+        if not os.path.exists(BASE_PATH + "api_key.txt"):
             KEY = input(
                 "Enter your OpenAI API key (https://platform.openai.com/account/api-keys): "
             )
-            with open("api_key.txt", "w") as f:
+            with open(BASE_PATH + "api_key.txt", "w") as f:
                 f.write(KEY)
 
-        with open("api_key.txt", "r") as f:
+        with open(BASE_PATH + "api_key.txt", "r") as f:
             openai.api_key = f.read()
 
         if openai.api_key == "":
@@ -148,8 +158,5 @@ if __name__ == "__main__":
             continue
         else:
             break
-
-    # if args.create_persona != None:
-    #     create_personas()
-
+        
     start_chat(persona=args.persona, history_file_name=args.load)
