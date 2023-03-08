@@ -130,7 +130,7 @@ def start_chat(persona="school-teacher"):
         assistant_message = response["choices"][0]["message"]["content"]
         messages.append({"role": "assistant", "content": assistant_message.strip()})
         #  print it in a different colour
-        
+
         print("\nAssistant:", assistant_message, end="\n\n")
 
 
@@ -139,6 +139,9 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "--persona", type=str, default=None, help="The persona of the chatbot."
+    )
+    parser.add_argument(
+        "--load", type=str, default=None, help="The chat history to load."
     )
     args = parser.parse_args()
 
