@@ -5,8 +5,6 @@ import argparse
 import pickle
 from colorama import Fore, Back, Style
 
-openai.api_key_path = "./api_key.txt"
-
 
 def create_personas():
     with open("personas.json", "r") as f:
@@ -36,7 +34,10 @@ def get_persona_prompt(persona):
         for p in personas:
             if p["name"] == persona:
                 persona_def = p["prompt"]
-                print(Fore.CYAN + persona + " persona loaded" + Style.RESET_ALL, end="\n\n")
+                print(
+                    Fore.CYAN + persona + " persona loaded" + Style.RESET_ALL,
+                    end="\n\n",
+                )
                 found = True
                 break
 
@@ -65,7 +66,9 @@ def load_chat_history(filename):
 
 
 def start_chat(persona=None, history_file_name=None):
-    print(Fore.GREEN + "\nWelcome to ChatGPT! Please ask me a question." + Style.RESET_ALL)
+    print(
+        Fore.GREEN + "\nWelcome to ChatGPT! Please ask me a question." + Style.RESET_ALL
+    )
     print("Type " + Fore.YELLOW + "quit" + Style.RESET_ALL + " to exit the chat.")
     print(
         "Type "
@@ -106,17 +109,47 @@ def start_chat(persona=None, history_file_name=None):
         )
         assistant_message = response["choices"][0]["message"]["content"]
         messages.append({"role": "assistant", "content": assistant_message.strip()})
-        print(Fore.GREEN + "\nAssistant: " + Style.RESET_ALL + assistant_message.strip(), end="\n\n")
+        print(
+            Fore.GREEN + "\nAssistant: " + Style.RESET_ALL + assistant_message.strip(),
+            end="\n\n",
+        )
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        "--persona", type=str, default=None, help="The persona of the chatbot."
+        "-p", "--persona", type=str, default=None, help="The persona of the chatbot."
     )
+    # parser.add_argument(
+    #     "-cp",
+    #     "--create-persona",
+    #     type=str,
+    #     default=None,
+    #     help="Create a user defined persona.",
+    # )
     parser.add_argument(
-        "--load", type=str, default=None, help="The chat history to load."
+        "-l", "--load", type=str, default=None, help="The chat history to load."
     )
     args = parser.parse_args()
+
+    while True:
+        if not os.path.exists("./api_key.txt"):
+            KEY = input(
+                "Enter your OpenAI API key (https://platform.openai.com/account/api-keys): "
+            )
+            with open("api_key.txt", "w") as f:
+                f.write(KEY)
+
+        with open("api_key.txt", "r") as f:
+            openai.api_key = f.read()
+
+        if openai.api_key == "":
+            print("Please enter a valid API key.")
+            continue
+        else:
+            break
+
+    # if args.create_persona != None:
+    #     create_personas()
 
     start_chat(persona=args.persona, history_file_name=args.load)
