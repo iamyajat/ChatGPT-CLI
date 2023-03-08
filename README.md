@@ -1,5 +1,7 @@
 # ChatGPT CLI
 
+![image](https://user-images.githubusercontent.com/68477362/223835355-c225227b-e1d7-4439-9091-d3a56e8f4512.png)
+
 ## Personas
 The application comes with a bunch of preloaded personas. For example:
 1. `school-teacher`
