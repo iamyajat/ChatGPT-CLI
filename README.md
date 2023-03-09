@@ -2,6 +2,19 @@
 
 ![image](https://user-images.githubusercontent.com/68477362/223910130-fce05d63-144b-4076-98da-cfe6cdaef584.png)
 
+## Installation 
+- Windows:
+    1. Download the latest release [here](https://github.com/iamyajat/ChatGPT-CLI/releases/tag/v1.0)
+    2. Run `setup.exe`
+    3. (optional) Add the install location to PATH (`C://Program Files (x86)/ChatGPT-CLI`)
+
+- Linux:
+    Coming soon
+
+- MacOS:
+    Coming soon
+
+
 ## Personas
 The application comes with a bunch of preloaded personas. For example:
 1. `school-teacher`
@@ -12,10 +25,13 @@ The application comes with a bunch of preloaded personas. For example:
 6. `dev`
 7. `romantic`
 
-## Usage
+## Usage 
+
+
 ```bash
-$ python3 chatgpt.py --persona school-teacher
+$ chatgpt --persona shakespeare
 ```
+Note: this only works if the install location is added to PATH.
 
 ## Examples
 1. **school-teacher**
