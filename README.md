@@ -18,12 +18,13 @@
 ## Personas
 The application comes with a bunch of preloaded personas. For example:
 1. `school-teacher`
-2. `nerd`
-3. `sage`
-4. `tech-bro`
-5. `to-the-point`
-6. `dev`
-7. `romantic`
+2. `shakespeare`
+3. `nerd`
+4. `sage`
+5. `tech-bro`
+6. `to-the-point`
+7. `dev`
+8. `romantic`
 
 ## Usage 
 
